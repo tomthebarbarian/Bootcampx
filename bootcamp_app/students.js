@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 const {argv} = require('process');
 
-const usableArgs = argv.slice(2);
+const rawArgs = argv.slice(2);
 
 const pool = new Pool({
   user: 'tomzhang',
@@ -9,6 +9,8 @@ const pool = new Pool({
   host: 'localhost',
   database: 'bootcampx'
 });
+
+const usableArgs = [`%${rawArgs[0]}%`, rawArgs[1] || 5];
 
 // console.log(usableArgs);
 

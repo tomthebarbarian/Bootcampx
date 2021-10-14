@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 const {argv} = require('process');
 
-const usableArgs = argv.slice(2);
+const rawArgs = argv.slice(2);
 
 const pool = new Pool({
   user: 'tomzhang',
@@ -9,6 +9,8 @@ const pool = new Pool({
   host: 'localhost',
   database: 'bootcampx'
 });
+
+const usableArgs = [`%${rawArgs[0]}%`];
 
 console.log(usableArgs);
 
@@ -18,8 +20,8 @@ pool.query(`
   JOIN students ON students.id = assistance_requests.student_id
   JOIN teachers ON teachers.id = assistance_requests.teacher_id
   JOIN cohorts ON cohorts.id = students.cohort_id
-  WHERE cohorts.name = '${usableArgs[0]}' || 'JUL02';
-`).then(res => {
+  WHERE cohorts.name = '$1' || 'JUL02';
+`, usableArgs).then(res => {
   res.rows.forEach(user => {
     // console.log(res.rows);
     console.log(user);
